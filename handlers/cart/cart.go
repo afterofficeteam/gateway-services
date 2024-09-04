@@ -11,7 +11,7 @@ import (
 func GetByUserID(w http.ResponseWriter, r *http.Request) {
 	userID := r.PathValue("user_id")
 	if userID == "" {
-		helper.HandleResponse(w, http.StatusBadRequest, "User ID is required")
+		helper.HandleResponse(w, http.StatusBadRequest, "User ID is required", nil)
 		return
 	}
 
@@ -23,9 +23,9 @@ func GetByUserID(w http.ResponseWriter, r *http.Request) {
 
 	bRes, err := cart.CartByUserID(bReq, userID)
 	if err != nil {
-		helper.HandleResponse(w, http.StatusInternalServerError, err.Error())
+		helper.HandleResponse(w, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	helper.HandleResponse(w, http.StatusOK, bRes)
+	helper.HandleResponse(w, http.StatusOK, helper.SUCCESS_MESSSAGE, bRes)
 }
