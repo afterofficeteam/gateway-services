@@ -1,0 +1,9 @@
+APP_PORT: 9993
+BASE_URL_PATH: "/gateway-service"
+DB_SSL_MODE: "disable"
+DB_USER: root
+DB_HOST: localhost
+DB_PASSWORD: db_password
+DB_NAME: db_order
+DB_DEBUG: true
+DB_PORT: 5432
