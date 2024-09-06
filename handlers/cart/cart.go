@@ -9,7 +9,7 @@ import (
 )
 
 func GetByUserID(w http.ResponseWriter, r *http.Request) {
-	userID := r.PathValue("user_id")
+	userID := r.PathValue("user_ids")
 	if userID == "" {
 		helper.HandleResponse(w, http.StatusBadRequest, "User ID is required", nil)
 		return
