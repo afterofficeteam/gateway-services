@@ -81,3 +81,103 @@ func (ncr *NetClientRequest) Get(load interface{}, channel chan Response) {
 		channel <- Response{Res: resBody, StatusCode: bResp.StatusCode}
 	}()
 }
+
+func (ncr *NetClientRequest) Post(load interface{}, channel chan Response) {
+	go func() {
+		marshalled, err := json.Marshal(load)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		// Construct URL with query parameters
+		urlObj, err := url.Parse(ncr.RequestUrl)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		if len(ncr.QueryParam) > 0 {
+			query := urlObj.Query()
+			for _, param := range ncr.QueryParam {
+				query.Add(param.Param, param.Value)
+			}
+			urlObj.RawQuery = query.Encode()
+		}
+
+		// Create a new POST request
+		req, err := http.NewRequest(http.MethodPost, urlObj.String(), bytes.NewBuffer(marshalled))
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		// Perform the request
+		bResp, err := ncr.NetClient.Do(req)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+		defer bResp.Body.Close()
+
+		// Read the response body
+		respBody, err := io.ReadAll(bResp.Body)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		channel <- Response{Res: respBody, StatusCode: bResp.StatusCode}
+	}()
+}
+
+func (ncr *NetClientRequest) Patch(load interface{}, channel chan Response) {
+	go func() {
+		marshalled, err := json.Marshal(load)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		// Construct URL with query parameters
+		urlObj, err := url.Parse(ncr.RequestUrl)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		if len(ncr.QueryParam) > 0 {
+			query := urlObj.Query()
+			for _, param := range ncr.QueryParam {
+				query.Add(param.Param, param.Value)
+			}
+			urlObj.RawQuery = query.Encode()
+		}
+
+		// Create a new POST request
+		req, err := http.NewRequest(http.MethodPatch, urlObj.String(), bytes.NewBuffer(marshalled))
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		// Perform the request
+		bResp, err := ncr.NetClient.Do(req)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+		defer bResp.Body.Close()
+
+		// Read the response body
+		respBody, err := io.ReadAll(bResp.Body)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		channel <- Response{Res: respBody, StatusCode: bResp.StatusCode}
+	}()
+}

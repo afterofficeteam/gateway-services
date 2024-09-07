@@ -3,6 +3,8 @@ package routes
 import (
 	"gateway-service/config"
 	"gateway-service/handlers/cart"
+	"gateway-service/handlers/order"
+	"gateway-service/handlers/users"
 	"gateway-service/util/middleware"
 	"log"
 	"net/http"
@@ -35,10 +37,20 @@ func (r *Routes) cartRoutes() {
 	r.Router.HandleFunc("GET /cart/{user_id}", middleware.ApplyMiddleware(cart.GetByUserID, middleware.EnabledCors, middleware.LoggerMiddleware()))
 }
 
+func (r *Routes) orderRoutes() {
+	r.Router.HandleFunc("POST /order", middleware.ApplyMiddleware(order.CreateOrder, middleware.EnabledCors, middleware.LoggerMiddleware()))
+}
+
+func (r *Routes) userRoutes() {
+	r.Router.HandleFunc("POST /login", middleware.ApplyMiddleware(users.Login, middleware.EnabledCors, middleware.LoggerMiddleware()))
+}
+
 func (r *Routes) SetupRouter() {
 	r.Router = http.NewServeMux()
 	r.SetupBaseURL()
 	r.cartRoutes()
+	r.orderRoutes()
+	r.userRoutes()
 }
 
 func (r *Routes) Run(port string) {
