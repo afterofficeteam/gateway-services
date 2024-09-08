@@ -12,7 +12,11 @@ import (
 
 func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
 	// Step 1: Prepare product IDs for query
-	productID := prepareProductIDs(req.ProductOrder)
+	var productArr []string
+	for _, p := range req.ProductOrder {
+		productArr = append(productArr, p.ProductID)
+	}
+	productID := strings.Join(productArr, ",")
 
 	// Step 2: Find product details
 	product, err := productServices.FindDetail(productID)
@@ -24,6 +28,7 @@ func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
 	if err := validateAndCalculatePrices(&req, *product); err != nil {
 		return nil, err
 	}
+
 	// Step 4: Create order and get order ID
 	orderID, err := order.CreateOrder(req)
 	if err != nil {
@@ -42,15 +47,6 @@ func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
 
 	createOK := "Create order success"
 	return &createOK, nil
-}
-
-// Step 1: Prepare product IDs for query
-func prepareProductIDs(productOrder []model.ProductOrder) string {
-	var productArr []string
-	for _, p := range productOrder {
-		productArr = append(productArr, p.ProductID)
-	}
-	return strings.Join(productArr, ",")
 }
 
 // Step 3: Validate stock and calculate prices
