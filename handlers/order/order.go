@@ -19,13 +19,6 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	usrIDcvt := uuid.MustParse(userID)
 
-	param := r.URL.Query()
-	limit := param.Get("limit")
-	if limit == "" {
-		helper.HandleResponse(w, http.StatusBadRequest, "Limit is required", nil)
-		return
-	}
-
 	var bReq model.PayloadCreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&bReq); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -33,7 +26,6 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bReq.UserID = usrIDcvt
-	bReq.Limit = limit
 
 	bRes, err := order.CreateOrder(bReq)
 	if err != nil {

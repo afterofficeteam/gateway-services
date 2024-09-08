@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"time"
 )
 
@@ -45,4 +47,30 @@ func ApplyMiddleware(h http.HandlerFunc, middlewares ...func(http.Handler) http.
 	}
 
 	return handler.ServeHTTP
+}
+
+func IsSlice(v interface{}) bool {
+	return reflect.TypeOf(v).Kind() == reflect.Slice
+}
+
+func DebugOutput(i interface{}) {
+	var mapRes map[string]interface{}
+	switch iData := i.(type) {
+	case string:
+		log.Println(iData)
+		return
+	case []byte:
+		json.Unmarshal(iData, &mapRes)
+		s, _ := json.MarshalIndent(mapRes, "", "\t")
+		fmt.Print(string(s))
+	default:
+		switch IsSlice(iData) {
+		case true:
+			s, _ := json.MarshalIndent(i, "", "\t")
+			fmt.Print(string(s))
+		default:
+			s, _ := json.MarshalIndent(i, "", "\t")
+			fmt.Print(string(s))
+		}
+	}
 }

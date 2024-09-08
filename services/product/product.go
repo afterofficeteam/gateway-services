@@ -14,7 +14,7 @@ var (
 func FindDetail(productID string) (res *model.DataProduct, err error) {
 	var (
 		productChannel = make(chan helper.Response)
-		productUri     = "url"
+		productUri     = "https://2421-36-72-214-46.ngrok-free.app/products/products"
 	)
 
 	payload := helper.NetClientRequest{
@@ -32,7 +32,7 @@ func FindDetail(productID string) (res *model.DataProduct, err error) {
 		},
 	}
 
-	payload.Get(payload, productChannel)
+	payload.Get(nil, productChannel)
 	productRes := <-productChannel
 
 	if productRes.Err != nil {

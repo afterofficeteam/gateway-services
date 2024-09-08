@@ -11,7 +11,6 @@ type PayloadCreateRequest struct {
 
 	// Product Get
 	ProductIds string `json:"product_ids"`
-	Limit      string `json:"limit"`
 
 	// Product Update
 	UpdateQty []UpdateQtyRequest `json:"update_qty"`

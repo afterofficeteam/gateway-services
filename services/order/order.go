@@ -14,7 +14,7 @@ var (
 func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
 	var (
 		orderChannel = make(chan helper.Response)
-		orderUri     = "url"
+		orderUri     = "http://localhost:9993/cart-order-service/order/create"
 	)
 
 	mutex.Lock()
