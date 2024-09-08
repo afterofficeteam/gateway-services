@@ -6,7 +6,7 @@ import (
 	model "gateway-service/models"
 )
 
-func CreatePayment(req interface{}) (*model.CreatePaymentResponse, error) {
+func CreatePayment(req interface{}) (*model.PaymentResponse, error) {
 	var (
 		paymentChannel = make(chan helper.Response)
 		paymentUri     = "https://4e90-36-72-214-46.ngrok-free.app/payments/payments"
@@ -24,7 +24,7 @@ func CreatePayment(req interface{}) (*model.CreatePaymentResponse, error) {
 		return nil, paymentRes.Err
 	}
 
-	var response *model.CreatePaymentResponse
+	var response *model.PaymentResponse
 	if err := json.Unmarshal(paymentRes.Res, &response); err != nil {
 		return nil, err
 	}

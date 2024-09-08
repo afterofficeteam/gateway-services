@@ -1,6 +1,6 @@
 package model
 
-type CreatePaymentResponse struct {
+type PaymentResponse struct {
 	StatusCode    string     `json:"status_code"`
 	StatusMessage string     `json:"status_message"`
 	TxId          string     `json:"transaction_id"`

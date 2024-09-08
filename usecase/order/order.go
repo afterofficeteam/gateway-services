@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func CreateOrder(req model.PayloadCreateRequest) (interface{}, error) {
+func CreateOrder(req model.PayloadCreateRequest) (*model.PaymentResponse, error) {
 	// Step 1: Prepare product IDs for query
 	var productArr []string
 	for _, p := range req.ProductOrder {
@@ -98,7 +98,7 @@ func updateProductStock(req model.PayloadCreateRequest, product model.DataProduc
 }
 
 // Step 6: Create payment
-func createPayment(bank model.BankTransfer, totalPrice int, orderID string) (interface{}, error) {
+func createPayment(bank model.BankTransfer, totalPrice int, orderID string) (*model.PaymentResponse, error) {
 	payloadPayment := struct {
 		BankTransfer       model.BankTransfer       `json:"bank_transfer"`
 		BasicAuthHeader    string                   `json:"basic_auth_header"`

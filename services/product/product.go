@@ -68,7 +68,7 @@ func Update(req []model.UpdateQtyRequest) (*string, error) {
 		return nil, updateRes.Err
 	}
 
-	response := string(updateRes.Res)
+	updateOK := string(updateRes.Res)
 
-	return &response, nil
+	return &updateOK, nil
 }
