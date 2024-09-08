@@ -5,6 +5,7 @@ import (
 	"gateway-service/helper"
 	model "gateway-service/models"
 	"gateway-service/usecase/order"
+	"gateway-service/util/middleware"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -14,6 +15,11 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 	userID := r.PathValue("user_id")
 	if userID == "" {
 		helper.HandleResponse(w, http.StatusBadRequest, "User ID is required", nil)
+		return
+	}
+
+	if limiter := middleware.GetLimiter(userID); !limiter.Allow() {
+		helper.HandleResponse(w, http.StatusTooManyRequests, "Too many request, please try again request", nil)
 		return
 	}
 

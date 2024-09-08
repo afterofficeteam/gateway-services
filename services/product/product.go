@@ -50,7 +50,7 @@ func FindDetail(productID string) (res *model.DataProduct, err error) {
 func Update(req []model.UpdateQtyRequest) (*string, error) {
 	var (
 		updateChannel = make(chan helper.Response)
-		updateUrl     = "url"
+		updateUrl     = "https://2421-36-72-214-46.ngrok-free.app/products/product-stocks"
 	)
 
 	mutex.Lock()
