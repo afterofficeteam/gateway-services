@@ -14,10 +14,10 @@ var (
 func FindDetail(productID string) (res *model.DataProduct, err error) {
 	var (
 		productChannel = make(chan helper.Response)
-		productUri     = "https://2421-36-72-214-46.ngrok-free.app/products/products"
+		productUri     = "https://f45f-36-72-214-46.ngrok-free.app/products/products"
 	)
 
-	payload := helper.NetClientRequest{
+	headerPayload := helper.NetClientRequest{
 		NetClient:  helper.NetClient,
 		RequestUrl: productUri,
 		QueryParam: []helper.QueryParams{
@@ -32,7 +32,7 @@ func FindDetail(productID string) (res *model.DataProduct, err error) {
 		},
 	}
 
-	payload.Get(nil, productChannel)
+	headerPayload.Get(nil, productChannel)
 	productRes := <-productChannel
 
 	if productRes.Err != nil {
@@ -50,28 +50,25 @@ func FindDetail(productID string) (res *model.DataProduct, err error) {
 func Update(req []model.UpdateQtyRequest) (*string, error) {
 	var (
 		updateChannel = make(chan helper.Response)
-		updateUrl     = "https://2421-36-72-214-46.ngrok-free.app/products/product-stocks"
+		updateUrl     = "https://f45f-36-72-214-46.ngrok-free.app/products/product-stocks"
 	)
 
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	payload := helper.NetClientRequest{
+	header := helper.NetClientRequest{
 		NetClient:  helper.NetClient,
 		RequestUrl: updateUrl,
 	}
 
-	payload.Patch(req, updateChannel)
+	header.Patch(req, updateChannel)
 	updateRes := <-updateChannel
 
 	if updateRes.Err != nil {
 		return nil, updateRes.Err
 	}
 
-	var response *string
-	if err := json.Unmarshal(updateRes.Res, &response); err != nil {
-		return nil, err
-	}
+	response := string(updateRes.Res)
 
-	return response, nil
+	return &response, nil
 }

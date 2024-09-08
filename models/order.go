@@ -33,8 +33,8 @@ type PayloadCreateRequest struct {
 }
 
 type TransactionDetails struct {
-	OrderID     string  `json:"order_id"`
-	GrossAmount float64 `json:"gross_amount"`
+	OrderID     string `json:"order_id"`
+	GrossAmount int    `json:"gross_amount"`
 }
 
 type BankTransfer struct {

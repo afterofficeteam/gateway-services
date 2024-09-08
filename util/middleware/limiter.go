@@ -23,7 +23,6 @@ func GetLimiter(userID string) *rate.Limiter {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	// If the user already has a limiter, return it
 	if limiter, exists := limiters[userID]; exists {
 		limiter.LastSeen = time.Now()
 		return limiter.Limiter

@@ -9,7 +9,7 @@ import (
 func CreatePayment(req interface{}) (*model.CreatePaymentResponse, error) {
 	var (
 		paymentChannel = make(chan helper.Response)
-		paymentUri     = "url"
+		paymentUri     = "https://4e90-36-72-214-46.ngrok-free.app/payments/payments"
 	)
 
 	payload := helper.NetClientRequest{

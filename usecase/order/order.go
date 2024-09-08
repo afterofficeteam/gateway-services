@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
+func CreateOrder(req model.PayloadCreateRequest) (interface{}, error) {
 	// Step 1: Prepare product IDs for query
 	var productArr []string
 	for _, p := range req.ProductOrder {
@@ -41,12 +41,12 @@ func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
 	}
 
 	// Step 6: Create payment
-	if err := createPayment(req.TotalPrice, *orderID); err != nil {
+	paymentOK, err := createPayment(req.BankTransfer, int(req.TotalPrice), *orderID)
+	if err != nil {
 		return nil, err
 	}
 
-	createOK := "Create order success"
-	return &createOK, nil
+	return paymentOK, nil
 }
 
 // Step 3: Validate stock and calculate prices
@@ -90,23 +90,34 @@ func updateProductStock(req model.PayloadCreateRequest, product model.DataProduc
 	}
 
 	_, err := productServices.Update(req.UpdateQty)
-	return err
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Step 6: Create payment
-func createPayment(totalPrice float64, orderID string) error {
+func createPayment(bank model.BankTransfer, totalPrice int, orderID string) (interface{}, error) {
 	payloadPayment := struct {
-		BasicAuthHeader string  `json:"basic_auth_header"`
-		OrderID         string  `json:"order_id"`
-		PaymentType     string  `json:"payment_type"`
-		GrossAmount     float64 `json:"gross_amount"`
+		BankTransfer       model.BankTransfer       `json:"bank_transfer"`
+		BasicAuthHeader    string                   `json:"basic_auth_header"`
+		PaymentType        string                   `json:"payment_type"`
+		TransactionDetails model.TransactionDetails `json:"transaction_details"`
 	}{
+		BankTransfer:    bank,
 		BasicAuthHeader: "Basic " + base64.StdEncoding.EncodeToString([]byte("SB-Mid-server-jz-9ZTjDo8yA-5kZCU6rgDNr"+":")),
-		OrderID:         orderID,
 		PaymentType:     "bank_transfer",
-		GrossAmount:     totalPrice,
+		TransactionDetails: model.TransactionDetails{
+			OrderID:     orderID,
+			GrossAmount: totalPrice,
+		},
 	}
 
-	_, err := payment.CreatePayment(payloadPayment)
-	return err
+	paymentOK, err := payment.CreatePayment(payloadPayment)
+	if err != nil {
+		return nil, err
+	}
+
+	return paymentOK, nil
 }
