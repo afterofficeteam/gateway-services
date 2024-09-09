@@ -46,6 +46,9 @@ func UpdateOrder(req interface{}) (*string, error) {
 		updateOrderUri = "http://localhost:9993/cart-order-service/order/callback"
 	)
 
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	client := &helper.NetClientRequest{
 		NetClient:  helper.NetClient,
 		RequestUrl: updateOrderUri,
