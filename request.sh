@@ -19,3 +19,16 @@ curl --location 'localhost:9990/gateway-service/order/037b4709-ee9c-4735-b213-9b
         "bank": "bca"
     }
 }'
+
+curl --location 'localhost:9990/gateway-service/payment' \
+--header 'Content-Type: application/json' \
+--data '{
+    "payment_type": "bank_transfer",
+    "transaction_details": {
+        "order_id": "e095f4e1-4c37-452a-ab02-939fe1ade69a",
+        "gross_amount": 10000
+    },
+    "bank_transfer": {
+        "bank": "bca"
+    }
+}'
