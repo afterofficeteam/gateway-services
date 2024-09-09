@@ -19,3 +19,10 @@ type VANumber struct {
 	Bank     string `json:"bank"`
 	VANumber string `json:"va_number"`
 }
+
+type PaymentRequest struct {
+	BasicAuthHeader    string             `json:"basic_auth_header"`
+	PaymentType        string             `json:"payment_type"`
+	TransactionDetails TransactionDetails `json:"transaction_details"`
+	BankTransfer       BankTransfer       `json:"bank_transfer"`
+}

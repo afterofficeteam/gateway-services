@@ -4,6 +4,7 @@ import (
 	"gateway-service/config"
 	"gateway-service/handlers/cart"
 	"gateway-service/handlers/order"
+	"gateway-service/handlers/payment"
 	"gateway-service/handlers/users"
 	"gateway-service/util/middleware"
 	"log"
@@ -45,12 +46,17 @@ func (r *Routes) userRoutes() {
 	r.Router.HandleFunc("POST /login", middleware.ApplyMiddleware(users.Login, middleware.EnabledCors, middleware.LoggerMiddleware()))
 }
 
+func (r *Routes) paymentRoutes() {
+	r.Router.HandleFunc("POST /payment", middleware.ApplyMiddleware(payment.CreatePayment, middleware.EnabledCors, middleware.LoggerMiddleware()))
+}
+
 func (r *Routes) SetupRouter() {
 	r.Router = http.NewServeMux()
 	r.SetupBaseURL()
 	r.cartRoutes()
 	r.orderRoutes()
 	r.userRoutes()
+	r.paymentRoutes()
 }
 
 func (r *Routes) Run(port string) {
