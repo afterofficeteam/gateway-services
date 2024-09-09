@@ -10,6 +10,15 @@ import (
 	"strings"
 )
 
+func UpdateOrder(req interface{}) (*string, error) {
+	updateOK, err := order.UpdateOrder(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return updateOK, nil
+}
+
 func CreateOrder(req model.PayloadCreateRequest) (*model.PaymentResponse, error) {
 	// Step 1: Prepare product IDs for query
 	var productArr []string
