@@ -12,12 +12,8 @@ func Login(req model.UsersLogin) (*model.LoginResponse, error) {
 		usersUri     = "url"
 	)
 
-	client := helper.NetClientRequest{
-		NetClient:  helper.NetClient,
-		RequestUrl: usersUri,
-	}
-
-	client.Post(req, usersChannel)
+	payload := helper.NewNetClientRequest(usersUri, helper.DefaultNetClient)
+	payload.Post(req, usersChannel)
 
 	usersRes := <-usersChannel
 	if usersRes.Err != nil {

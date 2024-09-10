@@ -12,11 +12,8 @@ func FindByUserID(req model.GetCartRequest, userID string) (*[]model.Cart, error
 		cartUri     = "http://localhost:9993/cart/" + userID
 	)
 
-	netClient := helper.NetClientRequest{
-		NetClient:  helper.NetClient,
-		RequestUrl: cartUri,
-	}
-	netClient.Get(req, cartChannel)
+	payload := helper.NewNetClientRequest(cartUri, helper.DefaultNetClient)
+	payload.Get(req, cartChannel)
 	cartRes := <-cartChannel
 	if cartRes.Err != nil {
 		return nil, cartRes.Err

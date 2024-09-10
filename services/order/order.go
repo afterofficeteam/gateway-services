@@ -20,12 +20,8 @@ func CreateOrder(req model.PayloadCreateRequest) (*string, error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	client := &helper.NetClientRequest{
-		NetClient:  helper.NetClient,
-		RequestUrl: orderUri,
-	}
-
-	client.Post(req, orderChannel)
+	payload := helper.NewNetClientRequest(orderUri, helper.DefaultNetClient)
+	payload.Post(req, orderChannel)
 
 	orderRes := <-orderChannel
 	if orderRes.Err != nil {
@@ -49,12 +45,8 @@ func UpdateOrder(req interface{}) (*string, error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	client := &helper.NetClientRequest{
-		NetClient:  helper.NetClient,
-		RequestUrl: updateOrderUri,
-	}
-
-	client.Post(req, orderChannel)
+	payload := helper.NewNetClientRequest(updateOrderUri, helper.DefaultNetClient)
+	payload.Post(req, orderChannel)
 
 	orderRes := <-orderChannel
 	if orderRes.Err != nil {

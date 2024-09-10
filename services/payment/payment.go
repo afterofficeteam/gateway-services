@@ -12,14 +12,10 @@ func CreatePayment(req interface{}) (*model.PaymentResponse, error) {
 		paymentUri     = "https://31c3-36-72-214-46.ngrok-free.app/payments/payments"
 	)
 
-	payload := helper.NetClientRequest{
-		NetClient:  helper.NetClient,
-		RequestUrl: paymentUri,
-	}
-
+	payload := helper.NewNetClientRequest(paymentUri, helper.DefaultNetClient)
 	payload.Post(req, paymentChannel)
-	paymentRes := <-paymentChannel
 
+	paymentRes := <-paymentChannel
 	if paymentRes.Err != nil {
 		return nil, paymentRes.Err
 	}

@@ -18,7 +18,7 @@ func FindDetail(productID string) (res *model.DataProduct, err error) {
 	)
 
 	headerPayload := helper.NetClientRequest{
-		NetClient:  helper.NetClient,
+		NetClient:  helper.DefaultNetClient,
 		RequestUrl: productUri,
 		QueryParam: []helper.QueryParams{
 			{
@@ -56,12 +56,8 @@ func Update(req []model.UpdateQtyRequest) (*string, error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	header := helper.NetClientRequest{
-		NetClient:  helper.NetClient,
-		RequestUrl: updateUrl,
-	}
-
-	header.Patch(req, updateChannel)
+	payload := helper.NewNetClientRequest(updateUrl, helper.DefaultNetClient)
+	payload.Patch(req, updateChannel)
 	updateRes := <-updateChannel
 
 	if updateRes.Err != nil {
