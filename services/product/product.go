@@ -15,8 +15,8 @@ var (
 // It sends an HTTP GET request to the product service and parses the response.
 func FindDetail(productID string) (res *model.DataProduct, err error) {
 	var (
-		productChannel = make(chan helper.Response)                                   // Channel to receive the response asynchronously
-		productUri     = "https://f45f-36-72-214-46.ngrok-free.app/products/products" // URL of the product service
+		productChannel = make(chan helper.Response)                                     // Channel to receive the response asynchronously
+		productUri     = "https://8a43-110-136-183-86.ngrok-free.app/products/products" // URL of the product service
 	)
 
 	// Prepare the request payload with necessary query parameters.

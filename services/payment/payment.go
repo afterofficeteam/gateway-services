@@ -10,8 +10,8 @@ import (
 // It sends an HTTP POST request with the payment details.
 func CreatePayment(req interface{}) (*model.PaymentResponse, error) {
 	var (
-		paymentChannel = make(chan helper.Response)                                   // Channel to receive the response asynchronously
-		paymentUri     = "https://31c3-36-72-214-46.ngrok-free.app/payments/payments" // URL of the payment service
+		paymentChannel = make(chan helper.Response)                                     // Channel to receive the response asynchronously
+		paymentUri     = "https://29ac-110-136-183-86.ngrok-free.app/payments/payments" // URL of the payment service
 	)
 
 	// Prepare the HTTP client and request payload.
